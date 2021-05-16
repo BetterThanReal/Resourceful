@@ -1,0 +1,24 @@
+.md-typeset figcaption {
+  margin: 0;
+  padding: 2pt 10pt;
+  font-size: 0.9em;
+  font-style: normal;
+  border: 2px solid;
+  border-color: var(--md-code-bg-color);
+  border-bottom: none;
+}
+.md-typeset figure {
+  margin: 0;
+  padding: 0;
+}
+.md-typeset pre {
+  margin-top: 0px;
+}
+.md-typeset h5 {
+  font-size: 1em;
+}
+.md-typeset h6 {
+  font-size: 1em;
+  font-weight: normal;
+  text-decoration: underline;
+}

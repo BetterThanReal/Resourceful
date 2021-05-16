@@ -1,0 +1,26 @@
+site_name: Resourceful
+repo_name: BetterThanReal/Resourceful
+repo_url: https://github.com/BetterThanReal/Resourceful
+
+theme:
+  name: material
+  palette:
+    primary: 'Light Blue'
+    accent: 'Light Blue'
+    scheme: preference
+
+extra_css:
+  - css/extra.css
+
+nav:
+  - Overview: index.md
+  - Installation: installation.md
+  - API Reference: api-reference.md
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - toc:
+      permalink: true
+  - pymdownx.superfences

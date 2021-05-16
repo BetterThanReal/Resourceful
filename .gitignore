@@ -1,0 +1,9 @@
+.*.swp
+.DS_Store
+
+# Roblox Studio lock files
+*.rbxlx.lock
+*.rbxl.lock
+
+# mkdocs build directory
+/site/
