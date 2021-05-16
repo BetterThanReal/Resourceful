@@ -1,0 +1,6 @@
+[package]
+name = "betterthanreal/resourceful"
+author = "Better Than Real"
+license = "MIT"
+content_root = "src/Resourceful"
+version = "1.0.1"
