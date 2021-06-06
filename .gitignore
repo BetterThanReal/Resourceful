@@ -5,5 +5,8 @@
 *.rbxlx.lock
 *.rbxl.lock
 
+# Selene Roblox toml
+roblox.toml
+
 # mkdocs build directory
 /site/

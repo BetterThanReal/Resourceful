@@ -33,93 +33,72 @@
   end
 end
 
-local function isErr(err)
-  return type(err) == 'table' and err.msg ~= nil
+local function getNameForErr(name)
+  return name and (" for %s"):format(name) or ''
 end
 
-local function getErrMsg(err)
-  if isErr(err) then
-    return err.msg
+local function getRefLabel(ref)
+  local t = typeof(ref)
+
+  if t == 'Instance' then
+    local cn = type(ref.ClassName) == 'string' and
+      ref.ClassName ~= '' and ref.ClassName
+
+    local n = type(ref.name) == 'string' and
+      ref.name ~= '' and ref.name
+
+    return ("&lt;%s>%s"):format(
+      cn or 'Instance', n and (' "%s"'):format(n) or '')
   else
-    return err
-  end
-end
-
-local function doError(libraryName, err, level, onError, onErrorEvent)
-  level = level or 0
-  level = level + (level == 0 and 0 or 1)
-
-  if onError or onErrorEvent then
-    local errMsg = getErrMsg(err)
-    local name = libraryName or "script"
-
-    if onErrorEvent then
-      onErrorEvent:Fire(errMsg, name)
-    end
-
-    if onError then
-      pcall(onError, errMsg, name)
+    if t == 'string' then
+      return '"' .. ref .. '"'
+    elseif t == 'boolean' or t == 'number' or ref == nil then
+      return tostring(ref)
+    else
+      return '&lt;' .. t .. '>'
     end
   end
-
-  error(err, level)
 end
 
-local function getErrScope(libraryName)
-  if libraryName then
-    return (
-      "library '%s'. Please consult the installation instructions for '%s'"
-      ):format(libraryName, libraryName)
-  else
-    return "a script"
+local function getResourceErr(err, state)
+  local name = getNameForErr((state or {}).name)
+  local context = ''
+
+  local loading = (state or {}).loading or {}
+  if #loading > 0 then
+    context = (" while resolving '%s'"):format(table.concat(loading, "', '"))
   end
+
+  return (err):format(("%s%s"):format(name, context))
 end
 
-local function getErrLoad(libraryName, errMsg, loading)
-  return ({ msg = (
-    "Resourceful was unable to load required resources for '%s' in %s. " ..
-    "ERROR: %s"):format(
-      table.concat(loading, "', '"), getErrScope(libraryName), errMsg) })
-end
-
-local function getErrRequire(libraryName, errMsg, resourceName)
-  return ({ msg = (
-    "Resourceful was unable to require resource '%s' in %s. " ..
-    "ERROR: %s"):format(
-      resourceName, getErrScope(libraryName), errMsg) })
-end
-
-local function getSearchTargets(libraryName, searchTargets)
-  if searchTargets == nil then
-    doError(libraryName, (
-      "Resourceful was initialized without search targets for %s."
-      ):format(getErrScope(libraryName)), 0)
+local function getSearchTargets(name, search)
+  if typeof(search) == 'Instance' then
+    return { search }
   end
 
-  if typeof(searchTargets) == 'Instance' then
-    return { searchTargets }
+  if search == nil then
+    return { script.Parent }
   end
 
-  if type(searchTargets) ~= 'table' then
-    doError(libraryName, (
-      "Resourceful was initialized with an invalid search target for %s. "
-      ):format(getErrScope(libraryName)), 0)
-  end
-
-  if #searchTargets == 0 then
-    doError(libraryName, (
-      "Resourceful was initialized with empty search targets for %s. "
-      ):format(getErrScope(libraryName)), 0)
+  if type(search) ~= 'table' then
+    error((
+      "Invalid value for property 'search' in argument #1 'options' " ..
+      "to Resourceful()%s " ..
+      "(Instance or table of Instance objects expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(search)), 0)
   end
 
   local targets = {}
   local unique = {}
 
-  for _, target in ipairs(searchTargets) do
+  for _, target in ipairs(search) do
     if typeof(target) ~= 'Instance' then
-      doError(libraryName, (
-        "Resourceful was initialized with an invalid search target for %s. "
-        ):format(getErrScope(libraryName)), 0)
+      error((
+        "Invalid value for property 'search' in argument #1 'options' " ..
+        "to Resourceful()%s (Instance or table of Instance objects " ..
+        "expected, received table with %s)"
+        ):format(getNameForErr(name), getRefLabel(target)), 0)
     end
 
     if not unique[target] then
@@ -129,6 +108,10 @@ local function getSearchTargets(libraryName, searchTargets)
   end
 
   return targets
+end
+
+local function isResourcefulError(err)
+  return string.find(err, "Resourceful ") ~= nil
 end
 
 local function loadResource(state, resourceName)
@@ -144,39 +127,31 @@ local function loadResource(state, resourceName)
     resource = findResource(state, resourceName)
   end
 
-  if resource == nil and loader == nil and state.isStrict then
-    doError(state.name, getErrLoad(
-      state.name,
-      "Resource was neither found nor defined, and strict mode is enabled",
-      state.loading), 0)
-  end
-
   if loader ~= nil then
     local status
     status, resource = pcall(loader, state.resources, resource)
 
     if not status then
-      if isErr(resource) then
-        doError(state.name, resource, 0)
+      if isResourcefulError(resource) then
+        error(resource, 0)
       else
-        doError(
-          state.name,
-          getErrLoad(state.name, resource, state.loading), 0)
+        error(getResourceErr((
+          "Resourceful resource function '%s' encountered an error" ..
+          "%%s. ERROR: %s"):format(resourceName, resource), state), 0)
       end
     end
 
     if resource == nil and state.isStrict then
-      doError(state.name, getErrLoad(
-        state.name,
-        "The resource function returned nil, and strict mode is enabled",
-        state.loading), 0)
+      error(getResourceErr((
+        "Resourceful resource function '%s' returned nil%%s, " ..
+        "and strict mode is enabled"):format(resourceName), state), 0)
     end
   end
 
   if resource == nil and state.isStrict then
-    doError(state.name, getErrLoad(
-      state.name, "No such resource was found, and strict mode is enabled",
-      state.loading), 0)
+    error(getResourceErr((
+      "Resourceful resource '%s' was neither found nor defined%%s, " ..
+      "and strict mode is enabled"):format(resourceName), state), 0)
   end
 
   return resource
@@ -200,10 +175,8 @@ end
 
 local function getResource(state, resourceName)
   if state.loadingLookup[resourceName] then
-    doError(
-      state.name,
-      getErrLoad(
-        state.name, "Circular dependency encountered", state.loading), 0)
+    error(getResourceErr(
+      "Resourceful encountered a circular dependency%s", state), 0)
   end
 
   state.loadingLookup[resourceName] = true
@@ -215,7 +188,7 @@ local function getResource(state, resourceName)
   state.loading[#state.loading] = nil
 
   if not status then
-    doError(state.name, resource, 0)
+    error(resource, 0)
   end
 
   return resource
@@ -233,19 +206,18 @@ local function getRequire(state, resourceName)
   if typeof(required) ~= 'Instance' or
     required.ClassName ~= 'ModuleScript' then
 
-    doError(
-      state.name,
-      getErrRequire(
-        state.name, "Resource is not a ModuleScript", resourceName), 0)
+    error(getResourceErr((
+      "Resourceful attempted to require non-ModuleScript resource '%s'%%s"
+      ):format(resourceName), state), 0)
   end
 
   local status
   status, required = pcall(require, required)
 
   if not status then
-    doError(
-      state.name,
-      getErrRequire(state.name, required, resourceName), 0)
+    error(getResourceErr((
+      "Resourceful encountered an error requiring module '%s'%%s"
+      ):format(resourceName), state), 0)
   end
 
   if state.isCached then
@@ -264,90 +236,74 @@ end
 
 local create = nil
 
-local function getErrorHandlers(onError, onErrorEvent, name)
-  local isInvalidOnError = onError ~= nil and typeof(onError) ~= 'function'
-
-  local isInvalidOnErrorEvent = onErrorEvent ~= nil and
-    not(typeof(onErrorEvent) == 'Instance' and
-      onErrorEvent.ClassName == 'BindableEvent')
-
-  if isInvalidOnError then
-    onError = nil
+local function _create(_table, options)
+  if options ~= nil and type(options) ~= 'table' then
+    error((
+      "Invalid value for argument #1 'options' to Resourceful() " ..
+      "(table expected, received %s)"):format(getRefLabel(options)), 2)
   end
 
-  if isInvalidOnErrorEvent then
-    onErrorEvent = nil
-  end
-
-  local errMsg = nil
-
-  if isInvalidOnError then
-    errMsg = (
-      "Resourceful was initialized with a non-function value " ..
-      "for onError in %s."):format(getErrScope(name))
-
-  elseif isInvalidOnErrorEvent then
-    errMsg = (
-      "Resourceful was initialized with a non-BindableEvent value for " ..
-      "onErrorEvent in %s."):format(getErrScope(name))
-  end
-
-  return onError, onErrorEvent, errMsg
-end
-
-create = function(table, options)
   options = options or {}
-  options.search = options.search or script.Parent 
+  local isCached = options.isCached
+  local isStrict = options.isStrict
+  local loaders = options.resources
+  local name = options.name
 
-  local name = options.name or nil
-  local onError = options.onError or nil
-  local onErrorEvent = options.onErrorEvent or nil
-
-  do
-    local errMsg
-    onError, onErrorEvent, errMsg = getErrorHandlers(
-      onError, onErrorEvent, name)
-
-    if errMsg then
-      doError(name, errMsg, 2, onError, onErrorEvent)
-    end
+  if name ~= nil and type(name) ~= 'string' then
+    error((
+      "Invalid value for property 'name' in argument #1 'options' " ..
+      "to Resourceful() (string expected, received %s)"
+      ):format(getRefLabel(name)), 2)
   end
 
-  do
-    local status
-    status, searchTargets = pcall(
-      getSearchTargets, name, options.search, onError, onErrorEvent)
-
-    if not status then
-      doError(name, searchTargets, 2, onError, onErrorEvent)
-    end
+  if isCached ~= nil and type(isCached) ~= 'boolean' then
+    error((
+      "Invalid value for property 'isCached' in argument #1 'options' " ..
+      "to Resourceful()%s (boolean expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(isCached)), 2)
+  else
+    isCached = isCached ~= false
   end
 
-  local resources = {}
+  if isStrict ~= nil and type(isStrict) ~= 'boolean' then
+    error((
+      "Invalid value for property 'isStrict' in argument #1 'options' " ..
+      "to Resourceful()%s (boolean expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(isStrict)), 2)
+  else
+    isStrict = isStrict ~= false
+  end
+
+  if loaders ~= nil and type(loaders) ~= 'table' then
+    error((
+      "Invalid value for property 'loaders' in argument #1 'options' " ..
+      "to Resourceful()%s (table expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(loaders)), 2)
+  else
+    loaders = loaders or {}
+  end
 
   local state = {
-    isCached = options.isCached == true or options.isCached == nil,
-    isStrict = options.isStrict ~= false,
-    loaders = options.resources or {},
+    isCached = isCached,
+    isStrict = isStrict,
+    loaders = loaders,
     loading = {},
     loadingLookup = {},
     name = name,
-    onError = onError,
-    onErrorEvent = onErrorEvent,
     requires = {},
-    resources = resources,
-    searchTargets = searchTargets,
+    resources = {},
+    searchTargets = getSearchTargets(name, options.search),
   }
 
   setmetatable(state.requires, {
-    __index = function(table, index)
+    __index = function(_table, index)
       local status, requires = pcall(getRequire, state, index)
 
       if not status then
         if #state.loading > 0 then
-          doError(name, requires, 0)
+          error(requires, 0)
         else
-          doError(name, getErrMsg(requires), 2, onError, onErrorEvent)
+          error(requires, 2)
         end
       end
 
@@ -355,19 +311,20 @@ create = function(table, options)
     end,
   })
 
+  local resources = state.resources
   resources.require = state.requires
 
   setmetatable(resources, {
     __call = create,
 
-    __index = function(table, index)
+    __index = function(_table, index)
       local status, resource = pcall(getResource, state, index)
 
       if not status then
         if #state.loading > 0 then
-          doError(name, resource, 0)
+          error(resource, 0)
         else
-          doError(name, getErrMsg(resource), 2, onError, onErrorEvent)
+          error(resource, 2)
         end
       end
 
@@ -378,8 +335,18 @@ create = function(table, options)
   do
     local status, message = pcall(initLoaders, state)
     if not status then
-      doError(name, getErrMsg(message), 2, onError, onErrorEvent)
+      error(message, 2)
     end
+  end
+
+  return resources
+end
+
+create = function(...)
+  local status, resources = pcall(_create, ...)
+
+  if not status then
+    error(resources, 2)
   end
 
   return resources
@@ -393,191 +360,53 @@ return create()</string>
             <string name="Source">return function()
   local Resourceful = require(script.parent)
 
-  describe("constructor", function()
-    describe("onError", function()
+  describe("Resourceful()", function()
+    describe("config", function()
       describe("errors", function()
-        it("should error when onError is not a function", function()
+        it("should error when args[1] ~= table or nil", function()
           expect(function()
-            return Resourceful({
-              onError = "wrong",
-              search = game,
-            })
-          end).to.throw("non-function value")
+            Resourceful(false)
+          end).to.throw("Invalid value for argument")
         end)
-        it("should error when onErrorEvent is not a BindableEvent", function()
+        it("should error when 'isCached' property of args[1] ~= boolean or nil", function()
           expect(function()
-            return Resourceful({
-              onErrorEvent = "wrong",
-              search = game,
-            })
-          end).to.throw("non-BindableEvent value")
+            Resourceful({ isCached = "wrong" })
+          end).to.throw("Invalid value for property")
         end)
-      end)
-    end)
-    describe("resources", function()
-      describe("errors", function()
-        it("should error when resources contain failing __init function", function()
+        it("should error when 'isStrict' property of args[1] ~= boolean or nil", function()
+          expect(function()
+            Resourceful({ isStrict = "wrong" })
+          end).to.throw("Invalid value for property")
+        end)
+        it("should error when 'name' property of args[1] ~= string or nil", function()
+          expect(function()
+            Resourceful({ name = false })
+          end).to.throw("Invalid value for property")
+        end)
+        it("should error when 'resources' property of args[1] ~= table or nil", function()
+          expect(function()
+            Resourceful({ resources = false })
+          end).to.throw("Invalid value for property")
+        end)
+        it("should error when resources contains failing __init function", function()
           expect(function()
             return Resourceful({
               resources = {
                 __init = function() error("custom error") end,
               },
-              search = game,
+              search = {},
             })
           end).to.throw("custom error")
         end)
-        it("should invoke onError function when provided", function()
-          local fnErrMsg = nil
-          local fnLibraryName = nil
-
+        it("should error when 'search' property of args[1] ~= Instance, table, or nil", function()
           expect(function()
-            return Resourceful({
-              name = "MyLib",
-              onError = function(errMsg, libraryName)
-                fnErrMsg = errMsg
-                fnLibraryName = libraryName
-              end,
-              resources = {
-                __init = function() error("custom error") end,
-              },
-              search = game,
-            })
-          end).to.throw("custom error")
-
-          expect(string.find(fnErrMsg, "custom error")).never.to.equal(nil)
-          expect(fnLibraryName).to.equal("MyLib")
+            Resourceful({ search = false })
+          end).to.throw("Invalid value for property")
         end)
-        it("should invoke onError function safely", function()
-          local didError = false
-
+        it("should error when 'search' property of args[1] contains non-Instance", function()
           expect(function()
-            return Resourceful({
-              name = "MyLib",
-              onError = function(errMsg, libraryName)
-                didError = true
-                error("onError error")
-              end,
-              resources = {
-                __init = function() error("custom error") end,
-              },
-              search = game,
-            })
-          end).to.throw("custom error")
-
-          expect(didError).to.equal(true)
-        end)
-        it("should invoke onErrorEvent when provided", function()
-          local onErrorEvent = Instance.new("BindableEvent")
-          local eventErrMsg = nil
-          local eventLibraryName = nil
-
-          local function onErrorEventFn(errMsg, libraryName)
-            eventErrMsg = errMsg
-            eventLibraryName = libraryName
-          end
-
-          local connection = onErrorEvent.Event:Connect(onErrorEventFn)
-
-          expect(function()
-            return Resourceful({
-              name = "MyLib",
-              onErrorEvent = onErrorEvent,
-              resources = {
-                __init = function() error("custom error") end,
-              },
-              search = game,
-            })
-          end).to.throw("custom error")
-
-          connection:Disconnect()
-
-          expect(string.find(eventErrMsg, "custom error")).never.to.equal(nil)
-          expect(eventLibraryName).to.equal("MyLib")
-        end)
-        it("should invoke onErrorEvent safely", function()
-          local onErrorEvent = Instance.new("BindableEvent")
-          local eventErrMsg = nil
-          local eventLibraryName = nil
-
-          local function onErrorEventFn(errMsg, libraryName)
-            eventErrMsg = errMsg
-            eventLibraryName = libraryName
-            error("onErrorEvent")
-          end
-
-          local connection = onErrorEvent.Event:Connect(onErrorEventFn)
-
-          expect(function()
-            return Resourceful({
-              name = "MyLib",
-              onErrorEvent = onErrorEvent,
-              resources = {
-                __init = function() error("custom error") end,
-              },
-              search = game,
-            })
-          end).to.throw("custom error")
-
-          connection:Disconnect()
-
-          expect(string.find(eventErrMsg, "custom error")).never.to.equal(nil)
-          expect(eventLibraryName).to.equal("MyLib")
-        end)
-        it("should invoke onError and onErrorEvent when provided", function()
-          local onErrorEvent = Instance.new("BindableEvent")
-          local eventErrMsg = nil
-          local eventLibraryName = nil
-          local fnErrMsg = nil
-          local fnLibraryName = nil
-
-          local function onErrorEventFn(errMsg, libraryName)
-            eventErrMsg = errMsg
-            eventLibraryName = libraryName
-          end
-
-          local connection = onErrorEvent.Event:Connect(onErrorEventFn)
-
-          expect(function()
-            return Resourceful({
-              name = "MyLib",
-              onError = function(errMsg, libraryName)
-                fnErrMsg = errMsg
-                fnLibraryName = libraryName
-              end,
-              onErrorEvent = onErrorEvent,
-              resources = {
-                __init = function() error("custom error") end,
-              },
-              search = game,
-            })
-          end).to.throw("custom error")
-
-          connection:Disconnect()
-
-          expect(string.find(eventErrMsg, "custom error")).never.to.equal(nil)
-          expect(eventLibraryName).to.equal("MyLib")
-
-          expect(string.find(fnErrMsg, "custom error")).never.to.equal(nil)
-          expect(fnLibraryName).to.equal("MyLib")
-        end)
-      end)
-    end)
-    describe("search target", function()
-      describe("errors", function()
-        it("should error when search target is non-instance", function()
-          expect(function()
-            Resourceful({ name = "wrong", search = "wrong" })
-          end).to.throw("invalid search target")
-        end)
-        it("should error when search target is empty table", function()
-          expect(function()
-            Resourceful({ search = { } })
-          end).to.throw("empty search targets")
-        end)
-        it("should error when search target is table with non-instance", function()
-          expect(function()
-            Resourceful({ search = { "wrong" } })
-          end).to.throw("invalid search target")
+            Resourceful({ search = { false } })
+          end).to.throw("Invalid value for property")
         end)
         it("should show library name in error message", function()
           expect(function()
@@ -586,258 +415,288 @@ return create()</string>
         end)
       end)
       describe("success", function()
-        it("should succeed when search target is instance", function()
+        it("should succeed when args[1] == nil", function()
+          expect(function()
+            Resourceful()
+          end).never.to.throw()
+        end)
+        it("should succeed when args[1] == table", function()
+          expect(function()
+            Resourceful({})
+          end).never.to.throw()
+        end)
+        it("should succeed when 'isCached' property of args[1] == boolean", function()
+          expect(function()
+            Resourceful({ isCached = false })
+          end).never.to.throw()
+        end)
+        it("should succeed when 'isStrict' property of args[1] == boolean", function()
+          expect(function()
+            Resourceful({ isStrict = false })
+          end).never.to.throw()
+        end)
+        it("should succeed when 'name' property of args[1] == string", function()
+          expect(function()
+            Resourceful({ name = "Name" })
+          end).never.to.throw()
+        end)
+        it("should succeed when 'resources' property of args[1] == table", function()
+          expect(function()
+            Resourceful({ resources = {} })
+          end).never.to.throw()
+        end)
+        it("should succeed when 'search' property of args[1] == table", function()
+          expect(function()
+            Resourceful({ search = {} })
+          end).never.to.throw()
+        end)
+        it("should succeed when 'search' property of args[1] == Instance", function()
           expect(function()
             Resourceful({ search = game })
           end).never.to.throw()
         end)
-        it("should succeed when search target is table with instance", function()
+        it("should succeed when 'search' property of args[1] contains Instance", function()
           expect(function()
             Resourceful({ search = { game } })
           end).never.to.throw()
         end)
-        it("should succeed when search target is table with multiple instances", function()
+        it("should succeed when 'search' property of args[1] contains multiple Instance objects", function()
           expect(function()
             Resourceful({ search = { game, game.ReplicatedStorage } })
           end).never.to.throw()
         end)
-        it("should succeed when search target replaces name", function()
+      end)
+    end)
+    describe("resource acquisition", function()
+      describe("errors", function()
+        it("should error when acquired resources references circular dependency", function()
           expect(function()
-            Resourceful({ search = game })
-          end).never.to.throw()
+            return Resourceful({
+              resources = {
+                prop = function(r) return r.prop end,
+              },
+              search = {},
+            }).prop
+          end).to.throw("circular dependency")
+        end)
+        it("should error when acquired resources invokes failing function", function()
+          expect(function()
+            return Resourceful({
+              resources = {
+                prop = function() error("custom error") end,
+              },
+              search = {},
+            }).prop
+          end).to.throw("custom error")
+        end)
+        it("should error when acquired resources invokes function that returns nil", function()
+          expect(function()
+            return Resourceful({
+              resources = {
+                prop = function() return nil end,
+              },
+              search = {},
+            }).prop
+          end).to.throw("strict mode")
+        end)
+      end)
+      describe("success", function()
+        it("should cache a function result", function()
+          local result = "success"
+          local count = 0
+          local R = Resourceful({
+            isCached = true,
+            resources = {
+              prop = function() count = count + 1; return result end,
+            },
+            search = {},
+          })
+          local _ = R.prop, R.prop
+
+          expect(count).to.equal(1)
+        end)
+        it("should default to caching a function result", function()
+          local result = "success"
+          local count = 0
+          local R = Resourceful({
+            resources = {
+              prop = function() count = count + 1; return result end,
+            },
+            search = {},
+          })
+          local _ = R.prop, R.prop
+
+          expect(count).to.equal(1)
+        end)
+        it("should not cache a function result when caching is disabled", function()
+          local result = "success"
+          local count = 0
+          local R = Resourceful({
+            isCached = false,
+            resources = {
+              prop = function() count = count + 1; return result end,
+            },
+            search = {},
+          })
+          local _ = R.prop, R.prop
+
+          expect(count).to.equal(2)
+        end)
+        it("should return a function resource", function()
+          local fn = function() end
+          expect(
+            Resourceful({
+              resources = {
+                prop = function() return fn end,
+              },
+              search = {},
+            }).prop
+          ).to.equal(fn)
+        end)
+        it("should return a function result", function()
+          local result = "success"
+          expect(
+            Resourceful({
+              resources = {
+                prop = function() return result end,
+              },
+              search = {},
+            }).prop
+          ).to.equal(result)
+        end)
+        it("should return a number resource", function()
+          expect(
+            Resourceful({
+              resources = {
+                prop = 5,
+              },
+              search = {},
+            }).prop
+          ).to.equal(5)
+        end)
+        it("should return a property resource referenced by a property function", function()
+          local val = 5
+          expect(
+            Resourceful({
+              resources = {
+                val = val,
+                prop = function(r) return r.val end,
+              },
+              search = {},
+            }).prop
+          ).to.equal(val)
+        end)
+        it("should return a string resource", function()
+          expect(
+            Resourceful({
+              resources = {
+                prop = "prop",
+              },
+              search = {},
+            }).prop
+          ).to.equal("prop")
+        end)
+        it("should return a table resource", function()
+          local tbl = { key = "value" }
+          expect(
+            Resourceful({
+              resources = {
+                prop = tbl,
+              },
+              search = {},
+            }).prop
+          ).to.equal(tbl)
         end)
       end)
     end)
-  end)
-  describe("resource acquisition", function()
-    describe("errors", function()
-      it("should error when resources contain circular dependency", function()
-        expect(function()
-          return Resourceful({
-            resources = {
-              prop = function(r) return r.prop end,
-            },
-            search = game,
-          }).prop
-        end).to.throw("Circular dependency")
+    describe("resource require", function()
+      describe("errors", function()
+        it("should error when missing target is required in non-strict mode", function()
+          expect(function()
+            return Resourceful({
+              isStrict = false,
+              resources = {},
+              search = {},
+            }).require.prop
+          end).to.throw("non-ModuleScript")
+        end)
+        it("should error when missing target is required in strict mode", function()
+          expect(function()
+            return Resourceful({
+              isStrict = true,
+              resources = {},
+              search = {},
+            }).require.prop
+          end).to.throw("strict mode")
+        end)
+        it("should error when non-ModuleScript target is required", function()
+          expect(function()
+            return Resourceful({
+              resources = {
+                prop = false,
+              },
+              search = {},
+            }).require.prop
+          end).to.throw("non-ModuleScript")
+        end)
+        it("should error when ModuleScript target with error is required", function()
+          expect(function()
+            return Resourceful({
+              resources = {},
+              search = game.ServerScriptService.Tests.Resourceful,
+            }).require.error_module
+          end).to.throw("error requiring module")
+        end)
       end)
-      it("should error when resources contain failing function", function()
-        expect(function()
-          return Resourceful({
-            resources = {
-              prop = function() error("custom error") end,
-            },
-            search = game,
-          }).prop
-        end).to.throw("custom error")
-      end)
-      it("should error when resources contain non-requirable require target", function()
-        expect(function()
-          return Resourceful({
-            resources = {
-              prop = false,
-            },
-            search = game,
-          }).require.prop
-        end).to.throw("not a ModuleScript")
-      end)
-    end)
-    describe("success", function()
-      it("should cache a function result", function()
-        local result = "success"
-        local count = 0
-        local R = Resourceful({
-          isCached = true,
-          resources = {
-            prop = function() count = count + 1; return result end,
-          },
-          search = game,
-        })
-        local _ = R.prop, R.prop
-
-        expect(count).to.equal(1)
-      end)
-      it("should default to caching a function result", function()
-        local result = "success"
-        local count = 0
-        local R = Resourceful({
-          resources = {
-            prop = function() count = count + 1; return result end,
-          },
-          search = game,
-        })
-        local _ = R.prop, R.prop
-
-        expect(count).to.equal(1)
-      end)
-      it("should not cache a function result when caching is disabled", function()
-        local result = "success"
-        local count = 0
-        local R = Resourceful({
-          isCached = false,
-          resources = {
-            prop = function() count = count + 1; return result end,
-          },
-          search = game,
-        })
-        local _ = R.prop, R.prop
-
-        expect(count).to.equal(2)
-      end)
-      it("should return a function resource", function()
-        local fn = function() end
-        expect(
-          Resourceful({
-            resources = {
-              prop = function() return fn end,
-            },
-            search = game,
-          }).prop
-        ).to.equal(fn)
-      end)
-      it("should return a function result", function()
-        local result = "success"
-        expect(
-          Resourceful({
-            resources = {
-              prop = function() return result end,
-            },
-            search = game,
-          }).prop
-        ).to.equal(result)
-      end)
-      it("should return a number resource", function()
-        expect(
-          Resourceful({
-            resources = {
-              prop = 5,
-            },
-            search = game,
-          }).prop
-        ).to.equal(5)
-      end)
-      it("should return a property resource referenced by a property function", function()
-        local val = 5
-        expect(
-          Resourceful({
-            resources = {
-              val = val,
-              prop = function(r) return r.val end,
-            },
-            search = game,
-          }).prop
-        ).to.equal(val)
-      end)
-      it("should return a string resource", function()
-        expect(
-          Resourceful({
-            resources = {
-              prop = "prop",
-            },
-            search = game,
-          }).prop
-        ).to.equal("prop")
-      end)
-      it("should return a table resource", function()
-        local tbl = { key = "value" }
-        expect(
-          Resourceful({
-            resources = {
-              prop = tbl,
-            },
-            search = game,
-          }).prop
-        ).to.equal(tbl)
+      describe("success", function()
+        it("should succeed when ModuleScript target is required", function()
+          expect(
+            Resourceful({
+              resources = {},
+              search = game.ServerScriptService.Tests.Resourceful,
+            }).require.success_module
+          ).to.equal("success")
+        end)
       end)
     end)
-  end)
-  describe("resource require", function()
-    describe("errors", function()
-      it("should error when missing target is required in non-strict mode", function()
-        expect(function()
-          return Resourceful({
-            isStrict = false,
-            resources = {},
-            search = game,
-          }).require.prop
-        end).to.throw("not a ModuleScript")
+    describe("search target acquisition", function()
+      describe("success", function()
+        it("should return target when target is found in search targets", function()
+          expect(
+            Resourceful({
+              resources = {},
+              search = game.ServerScriptService.Tests.Resourceful,
+            }).success_module.ClassName
+          ).to.equal("ModuleScript")
+        end)
+        it("should return nil when target is not found in search targets in non-strict mode", function()
+          expect(
+            Resourceful({
+              isStrict = false,
+              resources = {},
+              search = {},
+            }).success_module
+          ).to.equal(nil)
+        end)
       end)
-      it("should error when missing target is required in strict mode", function()
-        expect(function()
-          return Resourceful({
-            isStrict = true,
-            resources = {},
-            search = game,
-          }).require.prop
-        end).to.throw("strict mode")
-      end)
-      it("should error when non-ModuleScript target is required", function()
-        expect(function()
-          return Resourceful({
-            resources = {
-              prop = false,
-            },
-            search = game,
-          }).require.prop
-        end).to.throw("not a ModuleScript")
-      end)
-      it("should error when ModuleScript target with error is required", function()
-        expect(function()
-          return Resourceful({
-            resources = {},
-            search = game.ServerScriptService.Tests.Resourceful,
-          }).require.error_module
-        end).to.throw("error while loading")
-      end)
-    end)
-    describe("success", function()
-      it("should succeed when ModuleScript target is required", function()
-        expect(
-          Resourceful({
-            resources = {},
-            search = game.ServerScriptService.Tests.Resourceful,
-          }).require.success_module
-        ).to.equal("success")
-      end)
-    end)
-  end)
-  describe("search target acquisition", function()
-    describe("success", function()
-      it("should return target when target is found in search targets", function()
-        expect(
-          Resourceful({
-            resources = {},
-            search = game.ServerScriptService.Tests.Resourceful,
-          }).success_module.ClassName
-        ).to.equal("ModuleScript")
-      end)
-      it("should return nil when target is not found in search targets in non-strict mode", function()
-        expect(
-          Resourceful({
-            isStrict = false,
-            resources = {},
-            search = game,
-          }).success_module
-        ).to.equal(nil)
-      end)
-    end)
-    describe("success", function()
-      it("should error when target is not found in search targets in strict mode", function()
-        expect(function()
-          return Resourceful({
-            isStrict = true,
-            resources = {},
-            search = game,
-          }).success_module
-        end).to.throw("strict mode")
-      end)
-      it("should default to strict mode", function()
-        expect(function()
-          return Resourceful({
-            resources = {},
-            search = game,
-          }).success_module
-        end).to.throw("strict mode")
+      describe("success", function()
+        it("should error when target is not found in search targets in strict mode", function()
+          expect(function()
+            return Resourceful({
+              isStrict = true,
+              resources = {},
+              search = {},
+            }).success_module
+          end).to.throw("strict mode")
+        end)
+        it("should default to strict mode", function()
+          expect(function()
+            return Resourceful({
+              resources = {},
+              search = {},
+            }).success_module
+          end).to.throw("strict mode")
+        end)
       end)
     end)
   end)
@@ -2816,15 +2675,19 @@ return TestSession
       <Item class="Script" referent="23">
         <Properties>
           <string name="Name">Resourceful</string>
-          <string name="Source">local TestEZ = require(game.ReplicatedStorage.TestEZ)
+          <string name="Source">-- Valid example names: 
+-- ErrorCircular, ErrorFunction, ErrorInvalidModule, ErrorModule, ErrorNil,
+-- ErrorNotFound
+local runExample = false
 
-local testLocations = {
-    game.ReplicatedStorage.Scripts,
-}
-
-local reporter = TestEZ.TextReporter
- 
-TestEZ.TestBootstrap:run(testLocations, reporter)</string>
+if type(runExample) == 'string' then
+  require(script.examples)(runExample)
+else
+  local TestEZ = require(game.ReplicatedStorage.TestEZ)
+  local testLocations = { game.ReplicatedStorage.Scripts }
+  local reporter = TestEZ.TextReporter
+  TestEZ.TestBootstrap:run(testLocations, reporter)
+end</string>
         </Properties>
         <Item class="ModuleScript" referent="24">
           <Properties>
@@ -2834,6 +2697,67 @@ TestEZ.TestBootstrap:run(testLocations, reporter)</string>
         </Item>
         <Item class="ModuleScript" referent="25">
           <Properties>
+            <string name="Name">examples</string>
+            <string name="Source">return function(exampleName)
+  local Resourceful = require(game.ReplicatedStorage.Scripts.Resourceful)
+  local resources = Resourceful({
+    name = "SuperCool",
+
+    resources = {
+      error_module = function(resources, found)
+        return game.ServerScriptService.Tests.Resourceful.error_module
+      end,
+
+      ErrorCircular = function(resources, found)
+        return resources.Helpers
+      end,
+
+      ErrorFunction = function(resources, found)
+        error("Function blew up")
+      end,
+
+      ErrorInvalidModule = function(resources, found)
+        return resources.require.InvalidModule
+      end,
+
+      ErrorMissingModule = function(resources, found)
+        return resources.require.MissingModule
+      end,
+
+      ErrorNilModule = function(resources, found)
+        return resources.require.ErrorNil
+      end,
+
+      ErrorModule = function(resources, found)
+        return resources.require.error_module
+      end,
+
+      ErrorNil = function(resources, found)
+        return nil
+      end,
+
+      ErrorNotFound = function(resources, found)
+        return resources.notFound
+      end,
+
+      InvalidModule = false,
+
+      StringLib = function(resources, found)
+        return resources.Helpers.strings
+      end,
+
+      Helpers = function(resources, found)
+        warn(("Testing Resourceful resource '%s'"):format(exampleName))
+        return resources[exampleName]
+      end,
+    },
+  })
+  return resources.StringLib
+end</string>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="26">
+          <Properties>
             <string name="Name">success_module</string>
             <string name="Source">return "success"</string>
           </Properties>
@@ -2841,18 +2765,18 @@ TestEZ.TestBootstrap:run(testLocations, reporter)</string>
       </Item>
     </Item>
   </Item>
-  <Item class="SoundService" referent="26">
+  <Item class="SoundService" referent="27">
     <Properties>
       <string name="Name">SoundService</string>
       <bool name="RespectFilteringEnabled">true</bool>
     </Properties>
   </Item>
-  <Item class="Workspace" referent="27">
+  <Item class="Workspace" referent="28">
     <Properties>
       <string name="Name">Workspace</string>
       <bool name="FilteringEnabled">true</bool>
     </Properties>
-    <Item class="Part" referent="28">
+    <Item class="Part" referent="29">
       <Properties>
         <string name="Name">Baseplate</string>
         <bool name="Anchored">true</bool>

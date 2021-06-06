@@ -16,6 +16,9 @@ nav:
   - Overview: index.md
   - Installation: installation.md
   - API Reference: api-reference.md
+  - Source:
+      - Changelog: changelog.md
+      - License: license.md
 
 markdown_extensions:
   - admonition
@@ -23,4 +26,5 @@ markdown_extensions:
       guess_lang: false
   - toc:
       permalink: true
+      toc_depth: 4
   - pymdownx.superfences

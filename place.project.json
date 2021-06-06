@@ -1,5 +1,7 @@
 {
   "name": "Resourceful",
+  "globIgnorePaths": [ "**/*.spec", "**/*.spec.lua" ],
+
   "tree": {
     "$className": "DataModel",
 
@@ -8,18 +10,6 @@
 
       "Scripts": {
         "$path": "src"
-      },
-
-      "TestEZ": {
-        "$path": "submodules/testez/src"
-      }
-    },
-
-    "ServerScriptService": {
-      "$className": "ServerScriptService",
-
-      "Tests": {
-        "$path": "tests"
       }
     },
 

@@ -1,14 +1,12 @@
-<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
-	<Meta name="ExplicitAutoJoints">true</Meta>
-	<External>null</External>
-	<External>nil</External>
-	<Item class="ModuleScript" referent="3">
-		<Properties>
-			<BinaryString name="AttributesSerialize"></BinaryString>
-			<Content name="LinkedSource"><null></null></Content>
-			<string name="Name">Resourceful</string>
-			<string name="ScriptGuid"></string>
-			<ProtectedString name="Source"><![CDATA[local function findResource(state, resourceName)
+<roblox version="4">
+  <Item class="Folder" referent="0">
+    <Properties>
+      <string name="Name">Resourceful</string>
+    </Properties>
+    <Item class="ModuleScript" referent="1">
+      <Properties>
+        <string name="Name">Resourceful</string>
+        <string name="Source">local function findResource(state, resourceName)
   for _, target in ipairs(state.searchTargets) do
     target = target:FindFirstChild(resourceName, false)
     if target then
@@ -17,93 +15,72 @@
   end
 end
 
-local function isErr(err)
-  return type(err) == 'table' and err.msg ~= nil
+local function getNameForErr(name)
+  return name and (" for %s"):format(name) or ''
 end
 
-local function getErrMsg(err)
-  if isErr(err) then
-    return err.msg
+local function getRefLabel(ref)
+  local t = typeof(ref)
+
+  if t == 'Instance' then
+    local cn = type(ref.ClassName) == 'string' and
+      ref.ClassName ~= '' and ref.ClassName
+
+    local n = type(ref.name) == 'string' and
+      ref.name ~= '' and ref.name
+
+    return ("&lt;%s>%s"):format(
+      cn or 'Instance', n and (' "%s"'):format(n) or '')
   else
-    return err
-  end
-end
-
-local function doError(libraryName, err, level, onError, onErrorEvent)
-  level = level or 0
-  level = level + (level == 0 and 0 or 1)
-
-  if onError or onErrorEvent then
-    local errMsg = getErrMsg(err)
-    local name = libraryName or "script"
-
-    if onErrorEvent then
-      onErrorEvent:Fire(errMsg, name)
-    end
-
-    if onError then
-      pcall(onError, errMsg, name)
+    if t == 'string' then
+      return '"' .. ref .. '"'
+    elseif t == 'boolean' or t == 'number' or ref == nil then
+      return tostring(ref)
+    else
+      return '&lt;' .. t .. '>'
     end
   end
-
-  error(err, level)
 end
 
-local function getErrScope(libraryName)
-  if libraryName then
-    return (
-      "library '%s'. Please consult the installation instructions for '%s'"
-      ):format(libraryName, libraryName)
-  else
-    return "a script"
+local function getResourceErr(err, state)
+  local name = getNameForErr((state or {}).name)
+  local context = ''
+
+  local loading = (state or {}).loading or {}
+  if #loading > 0 then
+    context = (" while resolving '%s'"):format(table.concat(loading, "', '"))
   end
+
+  return (err):format(("%s%s"):format(name, context))
 end
 
-local function getErrLoad(libraryName, errMsg, loading)
-  return ({ msg = (
-    "Resourceful was unable to load required resources for '%s' in %s. " ..
-    "ERROR: %s"):format(
-      table.concat(loading, "', '"), getErrScope(libraryName), errMsg) })
-end
-
-local function getErrRequire(libraryName, errMsg, resourceName)
-  return ({ msg = (
-    "Resourceful was unable to require resource '%s' in %s. " ..
-    "ERROR: %s"):format(
-      resourceName, getErrScope(libraryName), errMsg) })
-end
-
-local function getSearchTargets(libraryName, searchTargets)
-  if searchTargets == nil then
-    doError(libraryName, (
-      "Resourceful was initialized without search targets for %s."
-      ):format(getErrScope(libraryName)), 0)
+local function getSearchTargets(name, search)
+  if typeof(search) == 'Instance' then
+    return { search }
   end
 
-  if typeof(searchTargets) == 'Instance' then
-    return { searchTargets }
+  if search == nil then
+    return { script.Parent }
   end
 
-  if type(searchTargets) ~= 'table' then
-    doError(libraryName, (
-      "Resourceful was initialized with an invalid search target for %s. "
-      ):format(getErrScope(libraryName)), 0)
-  end
-
-  if #searchTargets == 0 then
-    doError(libraryName, (
-      "Resourceful was initialized with empty search targets for %s. "
-      ):format(getErrScope(libraryName)), 0)
+  if type(search) ~= 'table' then
+    error((
+      "Invalid value for property 'search' in argument #1 'options' " ..
+      "to Resourceful()%s " ..
+      "(Instance or table of Instance objects expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(search)), 0)
   end
 
   local targets = {}
   local unique = {}
 
-  for _, target in ipairs(searchTargets) do
+  for _, target in ipairs(search) do
     if typeof(target) ~= 'Instance' then
-      doError(libraryName, (
-        "Resourceful was initialized with an invalid search target for %s. "
-        ):format(getErrScope(libraryName)), 0)
+      error((
+        "Invalid value for property 'search' in argument #1 'options' " ..
+        "to Resourceful()%s (Instance or table of Instance objects " ..
+        "expected, received table with %s)"
+        ):format(getNameForErr(name), getRefLabel(target)), 0)
     end
 
     if not unique[target] then
@@ -113,6 +90,10 @@ local function getSearchTargets(libraryName, searchTargets)
   end
 
   return targets
+end
+
+local function isResourcefulError(err)
+  return string.find(err, "Resourceful ") ~= nil
 end
 
 local function loadResource(state, resourceName)
@@ -128,39 +109,31 @@ local function loadResource(state, resourceName)
     resource = findResource(state, resourceName)
   end
 
-  if resource == nil and loader == nil and state.isStrict then
-    doError(state.name, getErrLoad(
-      state.name,
-      "Resource was neither found nor defined, and strict mode is enabled",
-      state.loading), 0)
-  end
-
   if loader ~= nil then
     local status
     status, resource = pcall(loader, state.resources, resource)
 
     if not status then
-      if isErr(resource) then
-        doError(state.name, resource, 0)
+      if isResourcefulError(resource) then
+        error(resource, 0)
       else
-        doError(
-          state.name,
-          getErrLoad(state.name, resource, state.loading), 0)
+        error(getResourceErr((
+          "Resourceful resource function '%s' encountered an error" ..
+          "%%s. ERROR: %s"):format(resourceName, resource), state), 0)
       end
     end
 
     if resource == nil and state.isStrict then
-      doError(state.name, getErrLoad(
-        state.name,
-        "The resource function returned nil, and strict mode is enabled",
-        state.loading), 0)
+      error(getResourceErr((
+        "Resourceful resource function '%s' returned nil%%s, " ..
+        "and strict mode is enabled"):format(resourceName), state), 0)
     end
   end
 
   if resource == nil and state.isStrict then
-    doError(state.name, getErrLoad(
-      state.name, "No such resource was found, and strict mode is enabled",
-      state.loading), 0)
+    error(getResourceErr((
+      "Resourceful resource '%s' was neither found nor defined%%s, " ..
+      "and strict mode is enabled"):format(resourceName), state), 0)
   end
 
   return resource
@@ -184,10 +157,8 @@ end
 
 local function getResource(state, resourceName)
   if state.loadingLookup[resourceName] then
-    doError(
-      state.name,
-      getErrLoad(
-        state.name, "Circular dependency encountered", state.loading), 0)
+    error(getResourceErr(
+      "Resourceful encountered a circular dependency%s", state), 0)
   end
 
   state.loadingLookup[resourceName] = true
@@ -199,7 +170,7 @@ local function getResource(state, resourceName)
   state.loading[#state.loading] = nil
 
   if not status then
-    doError(state.name, resource, 0)
+    error(resource, 0)
   end
 
   return resource
@@ -217,19 +188,18 @@ local function getRequire(state, resourceName)
   if typeof(required) ~= 'Instance' or
     required.ClassName ~= 'ModuleScript' then
 
-    doError(
-      state.name,
-      getErrRequire(
-        state.name, "Resource is not a ModuleScript", resourceName), 0)
+    error(getResourceErr((
+      "Resourceful attempted to require non-ModuleScript resource '%s'%%s"
+      ):format(resourceName), state), 0)
   end
 
   local status
   status, required = pcall(require, required)
 
   if not status then
-    doError(
-      state.name,
-      getErrRequire(state.name, required, resourceName), 0)
+    error(getResourceErr((
+      "Resourceful encountered an error requiring module '%s'%%s"
+      ):format(resourceName), state), 0)
   end
 
   if state.isCached then
@@ -248,90 +218,74 @@ end
 
 local create = nil
 
-local function getErrorHandlers(onError, onErrorEvent, name)
-  local isInvalidOnError = onError ~= nil and typeof(onError) ~= 'function'
-
-  local isInvalidOnErrorEvent = onErrorEvent ~= nil and
-    not(typeof(onErrorEvent) == 'Instance' and
-      onErrorEvent.ClassName == 'BindableEvent')
-
-  if isInvalidOnError then
-    onError = nil
+local function _create(_table, options)
+  if options ~= nil and type(options) ~= 'table' then
+    error((
+      "Invalid value for argument #1 'options' to Resourceful() " ..
+      "(table expected, received %s)"):format(getRefLabel(options)), 2)
   end
 
-  if isInvalidOnErrorEvent then
-    onErrorEvent = nil
-  end
-
-  local errMsg = nil
-
-  if isInvalidOnError then
-    errMsg = (
-      "Resourceful was initialized with a non-function value " ..
-      "for onError in %s."):format(getErrScope(name))
-
-  elseif isInvalidOnErrorEvent then
-    errMsg = (
-      "Resourceful was initialized with a non-BindableEvent value for " ..
-      "onErrorEvent in %s."):format(getErrScope(name))
-  end
-
-  return onError, onErrorEvent, errMsg
-end
-
-create = function(table, options)
   options = options or {}
-  options.search = options.search or script.Parent 
+  local isCached = options.isCached
+  local isStrict = options.isStrict
+  local loaders = options.resources
+  local name = options.name
 
-  local name = options.name or nil
-  local onError = options.onError or nil
-  local onErrorEvent = options.onErrorEvent or nil
-
-  do
-    local errMsg
-    onError, onErrorEvent, errMsg = getErrorHandlers(
-      onError, onErrorEvent, name)
-
-    if errMsg then
-      doError(name, errMsg, 2, onError, onErrorEvent)
-    end
+  if name ~= nil and type(name) ~= 'string' then
+    error((
+      "Invalid value for property 'name' in argument #1 'options' " ..
+      "to Resourceful() (string expected, received %s)"
+      ):format(getRefLabel(name)), 2)
   end
 
-  do
-    local status
-    status, searchTargets = pcall(
-      getSearchTargets, name, options.search, onError, onErrorEvent)
-
-    if not status then
-      doError(name, searchTargets, 2, onError, onErrorEvent)
-    end
+  if isCached ~= nil and type(isCached) ~= 'boolean' then
+    error((
+      "Invalid value for property 'isCached' in argument #1 'options' " ..
+      "to Resourceful()%s (boolean expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(isCached)), 2)
+  else
+    isCached = isCached ~= false
   end
 
-  local resources = {}
+  if isStrict ~= nil and type(isStrict) ~= 'boolean' then
+    error((
+      "Invalid value for property 'isStrict' in argument #1 'options' " ..
+      "to Resourceful()%s (boolean expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(isStrict)), 2)
+  else
+    isStrict = isStrict ~= false
+  end
+
+  if loaders ~= nil and type(loaders) ~= 'table' then
+    error((
+      "Invalid value for property 'loaders' in argument #1 'options' " ..
+      "to Resourceful()%s (table expected, received %s)"
+      ):format(getNameForErr(name), getRefLabel(loaders)), 2)
+  else
+    loaders = loaders or {}
+  end
 
   local state = {
-    isCached = options.isCached == true or options.isCached == nil,
-    isStrict = options.isStrict ~= false,
-    loaders = options.resources or {},
+    isCached = isCached,
+    isStrict = isStrict,
+    loaders = loaders,
     loading = {},
     loadingLookup = {},
     name = name,
-    onError = onError,
-    onErrorEvent = onErrorEvent,
     requires = {},
-    resources = resources,
-    searchTargets = searchTargets,
+    resources = {},
+    searchTargets = getSearchTargets(name, options.search),
   }
 
   setmetatable(state.requires, {
-    __index = function(table, index)
+    __index = function(_table, index)
       local status, requires = pcall(getRequire, state, index)
 
       if not status then
         if #state.loading > 0 then
-          doError(name, requires, 0)
+          error(requires, 0)
         else
-          doError(name, getErrMsg(requires), 2, onError, onErrorEvent)
+          error(requires, 2)
         end
       end
 
@@ -339,19 +293,20 @@ create = function(table, options)
     end,
   })
 
+  local resources = state.resources
   resources.require = state.requires
 
   setmetatable(resources, {
     __call = create,
 
-    __index = function(table, index)
+    __index = function(_table, index)
       local status, resource = pcall(getResource, state, index)
 
       if not status then
         if #state.loading > 0 then
-          doError(name, resource, 0)
+          error(resource, 0)
         else
-          doError(name, getErrMsg(resource), 2, onError, onErrorEvent)
+          error(resource, 2)
         end
       end
 
@@ -362,16 +317,25 @@ create = function(table, options)
   do
     local status, message = pcall(initLoaders, state)
     if not status then
-      doError(name, getErrMsg(message), 2, onError, onErrorEvent)
+      error(message, 2)
     end
   end
 
   return resources
 end
 
-return create()]]></ProtectedString>
-			<int64 name="SourceAssetId">-1</int64>
-			<BinaryString name="Tags"></BinaryString>
-		</Properties>
-	</Item>
+create = function(...)
+  local status, resources = pcall(_create, ...)
+
+  if not status then
+    error(resources, 2)
+  end
+
+  return resources
+end
+
+return create()</string>
+      </Properties>
+    </Item>
+  </Item>
 </roblox>
