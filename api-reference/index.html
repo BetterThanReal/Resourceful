@@ -1,0 +1,1213 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-7.1.3">
+    
+    
+      
+        <title>API Reference - Resourceful</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.e35208c4.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ef6f36e2.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#02a6f2">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../css/extra.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="preference" data-md-color-primary="light-blue" data-md-color-accent="light-blue">
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#resourceful-api-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Resourceful" class="md-header__button md-logo" aria-label="Resourceful" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Resourceful
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/BetterThanReal/Resourceful/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    BetterThanReal/Resourceful
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Resourceful" class="md-nav__button md-logo" aria-label="Resourceful" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Resourceful
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/BetterThanReal/Resourceful/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    BetterThanReal/Resourceful
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          API Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        API Reference
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loading-the-module" class="md-nav__link">
+    Loading The Module
+  </a>
+  
+    <nav class="md-nav" aria-label="Loading The Module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acquiring-resources" class="md-nav__link">
+    Acquiring Resources
+  </a>
+  
+    <nav class="md-nav" aria-label="Acquiring Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requiring-resources" class="md-nav__link">
+    Requiring Resources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-resource-acquisition" class="md-nav__link">
+    Automatic Resource Acquisition
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-methods" class="md-nav__link">
+    Class Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Class Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-resourceful" class="md-nav__link">
+    Function: Resourceful()
+  </a>
+  
+    <nav class="md-nav" aria-label="Function: Resourceful()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config-properties" class="md-nav__link">
+    config Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resource-functions" class="md-nav__link">
+    Resource Functions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    Learn More
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+      
+      <label class="md-nav__link" for="__nav_4">
+        Source
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="Source" data-md-level="1">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          Source
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        Changelog
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loading-the-module" class="md-nav__link">
+    Loading The Module
+  </a>
+  
+    <nav class="md-nav" aria-label="Loading The Module">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#acquiring-resources" class="md-nav__link">
+    Acquiring Resources
+  </a>
+  
+    <nav class="md-nav" aria-label="Acquiring Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#requiring-resources" class="md-nav__link">
+    Requiring Resources
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automatic-resource-acquisition" class="md-nav__link">
+    Automatic Resource Acquisition
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-methods" class="md-nav__link">
+    Class Methods
+  </a>
+  
+    <nav class="md-nav" aria-label="Class Methods">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#function-resourceful" class="md-nav__link">
+    Function: Resourceful()
+  </a>
+  
+    <nav class="md-nav" aria-label="Function: Resourceful()">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config-properties" class="md-nav__link">
+    config Properties
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#resource-functions" class="md-nav__link">
+    Resource Functions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    Learn More
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/BetterThanReal/Resourceful/edit/master/docs/api-reference.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1 id="resourceful-api-reference">Resourceful: API Reference<a class="headerlink" href="#resourceful-api-reference" title="Permanent link">&para;</a></h1>
+<h2 id="loading-the-module">Loading The Module<a class="headerlink" href="#loading-the-module" title="Permanent link">&para;</a></h2>
+<p>Invoking <code>require()</code> upon the <code>Resourceful</code> module will return a <code>Resourceful</code>
+instance configured with default behavior, which can be used to acquire
+project resources using a clean syntax with robust error handling. </p>
+<h3 id="acquiring-resources">Acquiring Resources<a class="headerlink" href="#acquiring-resources" title="Permanent link">&para;</a></h3>
+<p>Acquiring resources is as simple as instantiating Resourceful, and specifying
+the name of the resource to be acquired:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">MyHelpers</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">MyHelpers</span> <span class="c1">-- Find resource &quot;MyHelpers&quot;</span>
+</code></pre></div>
+<h4 id="requiring-resources">Requiring Resources<a class="headerlink" href="#requiring-resources" title="Permanent link">&para;</a></h4>
+<p>Prepending the resource name with <code>require</code> causes Resourceful to issue
+<code>require()</code> upon the resource, which is expected to be a <code>ModuleScript</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">Main</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">Main</span>
+<span class="c1">-- Equivalent to: local Main = require(resources.Main)</span>
+<span class="c1">-- but offers additional error-handling!</span>
+</code></pre></div>
+<p>If an error occurs when invoking <code>require()</code>, or if the specified resource is
+not a <code>ModuleScript</code>, Resourceful will wrap and throw the error with
+Resourceful's own error message.</p>
+<h4 id="automatic-resource-acquisition">Automatic Resource Acquisition<a class="headerlink" href="#automatic-resource-acquisition" title="Permanent link">&para;</a></h4>
+<p>By default, Resourceful offers automatic resource acquisition to search for
+requested resources within the immediate children of Resourceful's
+<code>script.Parent</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+
+<span class="c1">-- Automatically find a resource named &quot;MyHelpers&quot;,</span>
+<span class="c1">-- which is a child Instance within script.Parent:</span>
+<span class="kd">local</span> <span class="n">MyHelpers</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">MyHelpers</span>
+
+<span class="c1">-- Automatically find and require a ModuleScript named &quot;Main&quot;,</span>
+<span class="c1">-- which is also a child Instance within script.Parent:</span>
+<span class="kd">local</span> <span class="n">Main</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">Main</span>
+</code></pre></div>
+<p><a href="#function-resourceful" title="Function: Resourceful()"><code>Resourceful()</code></a> can be invoked to create a
+<code>Resourceful</code> instance with customized behavior.</p>
+<h2 id="class-methods">Class Methods<a class="headerlink" href="#class-methods" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr><th>Function Name</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><a href='#function-resourceful'>Resourceful()</a></td>
+<td>Creates and returns a <code>Resourceful</code> instance with customized
+behavior, if a custom configuration is specified, or default behavior, if
+none is specified.</td></tr>
+</tbody></table>
+
+<h3 id="function-resourceful">Function: Resourceful()<a class="headerlink" href="#function-resourceful" title="Permanent link">&para;</a></h3>
+<p><code>Resourceful()</code> can be invoked to create a <code>Resourceful</code> instance with
+customized behavior (<a href="#examples" title="Function: Resourceful(): Examples">example</a>), which can:</p>
+<ul>
+<li>allow multiple <code>Instance</code> objects to be <a href="#config-property-search" title="config Property: search">searched</a> when looking for resources</li>
+<li>define <a href="#config-property-resources" title="config Property: resources">custom resources</a>, including <a href="#resource-functions" title="Resource Functions">resource functions</a> to acquire resources on-demand</li>
+<li>enable or disable <a href="#config-property-iscached" title="config Property: isCached">caching of resources</a></li>
+<li>cause <a href="#config-property-isstrict" title="config Property: isStrict">missing resources to return nil</a> instead of throwing an error</li>
+</ul>
+<h5 id="signature">Signature<a class="headerlink" href="#signature" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="n">Resourceful</span> <span class="n">Resourceful</span><span class="p">([</span><span class="n">table</span> <span class="n">config</span><span class="p">])</span>
+</code></pre></div>
+<h5 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h5>
+<table>
+<thead>
+<tr class='header'>
+  <th>Name</th><th>Type</th><th>Synopsis</th></tr>
+</thead>
+<tbody>
+<tr><td>config</td><td><code>table</code> (optional)</td>
+<td>Contains <a href="#config-properties">configuration properties</a> to
+define the behavior of the <code>Resourceful</code> object to be created and
+returned.  If not specified, a <code>Resourceful</code> object with default
+behavior will be returned.</td></tr>
+</tbody>
+</table>
+
+<h5 id="returns">Returns<a class="headerlink" href="#returns" title="Permanent link">&para;</a></h5>
+<table>
+<thead>
+<tr class='header'>
+  <th>Type(s)</th><th>Synopsis</th></tr>
+</thead>
+<tbody>
+<tr><td>Resourceful</td>
+<td>The <code>Resourceful</code> object configured according to the specified
+<code>config</code>, or with default behavior if <code>config</code> was not
+specified.</td></tr>
+</tbody>
+</table>
+
+<h5 id="side-effects">Side-Effects<a class="headerlink" href="#side-effects" title="Permanent link">&para;</a></h5>
+<p><code>Resourceful()</code> will execute the resource function
+<a href="#__init-resource-function" title="__init Resource Function"><code>config.resources.__init</code></a>, if it has been
+defined.</p>
+<h5 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h5>
+<p><code>Resourceful()</code> will throw an error if <code>config</code> is present but is not a
+<code>table</code>.</p>
+<p><code>Resourceful()</code> will throw an error if <code>config</code> contains a known property with
+an invalid value.</p>
+<p>Errors that occur during the execution of optional resource function
+<a href="#__init-resource-function" title="__init Resource Function">__init</a> will be wrapped and thrown by Resourceful.</p>
+<h5 id="caveats">Caveats<a class="headerlink" href="#caveats" title="Permanent link">&para;</a></h5>
+<p>None.</p>
+<h5 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h5>
+<figure><figcaption><em>Example: Customized Behavior</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">configOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">-- Custom configuration options go here</span>
+  <span class="c1">-- (details omitted for brevity)</span>
+<span class="p">}</span>
+
+<span class="c1">-- Create an instance of Resourceful with customized behavior:</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">(</span><span class="n">configOptions</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">otherConfigOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="c1">-- An example of another custom configuration</span>
+  <span class="c1">-- (details omitted for brevity)</span>
+<span class="p">}</span>
+
+<span class="c1">-- Multiple instances of Resourceful, each with customized behavior, can be</span>
+<span class="c1">-- used simultaneously.</span>
+<span class="kd">local</span> <span class="n">otherResources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">(</span><span class="n">otherConfigOptions</span><span class="p">)</span>
+
+<span class="c1">-- Using the customized Resourceful instance:</span>
+<span class="kd">local</span> <span class="n">MyHelperLib</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">MyHelperLib</span>
+
+<span class="c1">-- Using the other customized Resourceful instance:</span>
+<span class="kd">local</span> <span class="n">ThirdPartyLib</span> <span class="o">=</span> <span class="n">otherResources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">ThirdPartyLib</span>
+</code></pre></div>
+<h4 id="config-properties">config Properties<a class="headerlink" href="#config-properties" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr class='header'>
+  <th>Name</th><th>Type</th><th>Synopsis</th></tr>
+</thead>
+<tbody>
+<tr><td>isCached</td><td><code>boolean</code> (optional)</td>
+<td><p>When <code>true</code>, causes Resourceful to memorize the value of
+requested resources when they are first requested, returning those values
+during subsequent requests.  Defaults to <code>true</code>.
+(<a href="#config-property-iscached">More details</a>)</p></td></tr>
+<tr><td>isStrict</td><td><code>boolean</code> (optional)</td>
+<td><p>When <code>true</code>, causes Resourceful to throw an error when a
+requested resource is <code>nil</code> or doesn't exist.  Defaults to
+<code>true</code>.
+(<a href="#config-property-isstrict">More details</a>)</p></td></tr>
+<tr><td>name</td><td><code>string</code> (optional)</td>
+<td><p>When specified, is reported in error messages thrown by Resourceful.
+Defaults to <code>nil</code>.
+(<a href="#config-property-name">More details</a>)</p></td></tr>
+<tr><td>resources</td><td><code>table</code> (optional)</td>
+<td><p>Contains zero or more resource definitions, of any type of data, to be
+made available for resource acquisition.  Defaults to <code>{}</code>.
+(<a href="#config-property-resources">More details</a>)</p></td></tr>
+<tr><td>search</td><td><code>Instance</code>, or <code>table</code> of
+<code>Instance</code> objects (optional)</td>
+<td><p>An <code>Instance</code> object, or <code>table</code> of zero or
+more <code>Instance</code> objects, to be searched when automatically
+acquiring resources.  Defaults to the <code>Parent</code> of the Resourceful
+<code>Instance</code>.
+(<a href="#config-property-search">More details</a>)</p></td></tr>
+</tbody>
+</table>
+
+<h5 id="config-property-iscached">config Property: isCached<a class="headerlink" href="#config-property-iscached" title="Permanent link">&para;</a></h5>
+<p><code>isCached</code> is an optional <code>boolean</code> parameter that, when <code>true</code>, causes
+Resourceful to memorize the value of requested resources when they are first
+requested, returning those values during subsequent requests.  Defaults to
+<code>true</code>.</p>
+<p>Memorized values can improve performance for
+<a href="#resource-functions" title="Resource Functions">resource functions</a> that take time to execute.  For
+<code>Instance</code> resources found during
+<a href="#automatic-resource-acquisition" title="Automatic Resource Acquisition">automatic resource acquisition</a>, memorized
+values prevent the need for traversing through the
+<a href="#config-property-search" title="config Property: search">search path</a> again.</p>
+<h6 id="errors_1">Errors<a class="headerlink" href="#errors_1" title="Permanent link">&para;</a></h6>
+<p><code>Resourceful()</code> will throw an error if <code>config.isCached</code> is present but is not
+a <code>boolean</code>.</p>
+<h6 id="examples_1">Examples<a class="headerlink" href="#examples_1" title="Permanent link">&para;</a></h6>
+<figure><figcaption><em>Example: isCached</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">cached</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">isCached</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="kr">end</span> <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cached</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 17</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cached</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 17</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cached</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 17</span>
+
+<span class="kd">local</span> <span class="n">not_cached</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">isCached</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="kr">end</span> <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">not_cached</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 82</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">not_cached</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 23</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">not_cached</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 76</span>
+</code></pre></div>
+<h5 id="config-property-isstrict">config Property: isStrict<a class="headerlink" href="#config-property-isstrict" title="Permanent link">&para;</a></h5>
+<p><code>isStrict</code> is an optional <code>boolean</code> parameter that, when <code>true</code>, causes
+Resourceful to thrown an error when a requested resource is <code>nil</code> or doesn't
+exist.  Defaults to <code>true</code>.</p>
+<h6 id="errors_2">Errors<a class="headerlink" href="#errors_2" title="Permanent link">&para;</a></h6>
+<p><code>Resourceful()</code> will throw an error if <code>config.isStrict</code> is present but is not
+a <code>boolean</code>.</p>
+<h6 id="examples_2">Examples<a class="headerlink" href="#examples_2" title="Permanent link">&para;</a></h6>
+<figure><figcaption><em>Example: isStrict</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">strict</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">isStrict</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Nil</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="kc">nil</span>
+    <span class="kr">end</span> <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">strict</span><span class="p">.</span><span class="n">Nil</span><span class="p">)</span> <span class="c1">-- throws error</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">strict</span><span class="p">.</span><span class="n">missing</span><span class="p">)</span> <span class="c1">-- throws error</span>
+
+<span class="kd">local</span> <span class="n">not_strict</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">isStrict</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Nil</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="kc">nil</span>
+    <span class="kr">end</span> <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">not_strict</span><span class="p">.</span><span class="n">Nil</span><span class="p">)</span> <span class="c1">-- nil</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">not_strict</span><span class="p">.</span><span class="n">missing</span><span class="p">)</span> <span class="c1">-- nil</span>
+</code></pre></div>
+<p>Note that even if <code>isStrict</code> is set to <code>false</code>, Resourceful will throw an
+error if a <code>nil</code> resource is preceded with the
+<a href="#requiring-resources" title="Requiring Resources"><code>require</code></a>:</p>
+<figure><figcaption><em>Example: isStrict With require</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+
+<span class="kd">local</span> <span class="n">not_strict</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">isStrict</span> <span class="o">=</span> <span class="kc">false</span> <span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">not_strict</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">missing</span><span class="p">)</span> <span class="c1">-- throws an error</span>
+</code></pre></div>
+<h5 id="config-property-name">config Property: name<a class="headerlink" href="#config-property-name" title="Permanent link">&para;</a></h5>
+<p><code>name</code> is an optional <code>string</code> parameter that, when specified, is reported in
+error messages thrown by Resourceful.  Defaults to <code>nil</code>.</p>
+<p>When writing libraries to be shared with others, specifying a <code>name</code> can help
+users of your libraries to more easily identify and troubleshoot resource
+issues within your libraries.</p>
+<h6 id="errors_3">Errors<a class="headerlink" href="#errors_3" title="Permanent link">&para;</a></h6>
+<p><code>Resourceful()</code> will throw an error if <code>config.name</code> is present but is not a
+<code>string</code>.</p>
+<h6 id="examples_3">Examples<a class="headerlink" href="#examples_3" title="Permanent link">&para;</a></h6>
+<figure><figcaption><em>Example: name</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;MyLib&quot;</span> <span class="p">})</span>
+</code></pre></div>
+<h5 id="config-property-resources">config Property: resources<a class="headerlink" href="#config-property-resources" title="Permanent link">&para;</a></h5>
+<p><code>resources</code> is an optional <code>table</code> parameter of zero or more resource
+definitions, of any type of data, to be made available for resource
+acquisition.  Defaults to <code>{}</code>.</p>
+<p>The name of each element within <code>resources</code> defines the name of a custom
+resource that can be acquired.  An element's corresponding value defines the
+value of that resource.</p>
+<p>Resources that are assigned a data type other than <code>function</code> are returned
+immediately by Resourceful whenever those resources are requested.  In this
+case, Resourceful will not search for similarly named <code>Instance</code> children
+located within the defined <a href="#config-property-search" title="config Property: search">search path</a>, thus
+bypassing <a href="#automatic-resource-acquisition" title="Automatic Resource Acquisition">automatic resource acquisition</a>.</p>
+<p>For resources that are defined as functions, including the special resource
+named <a href="#__init-resource-function" title="__init Resource Function"><code>__init</code></a>, please refer to
+<a href="#resource-functions" title="Resource Functions">Resource Functions</a>.</p>
+<h6 id="errors_4">Errors<a class="headerlink" href="#errors_4" title="Permanent link">&para;</a></h6>
+<p><code>Resourceful()</code> will throw an error if <code>config.resources</code> is present but is
+not a <code>table</code>.</p>
+<p>Errors that occur during the execution of optional resource function
+<a href="#__init-resource-function" title="__init Resource Function">__init</a> will be wrapped and thrown by Resourceful.</p>
+<h6 id="examples_4">Examples<a class="headerlink" href="#examples_4" title="Permanent link">&para;</a></h6>
+<figure><figcaption><em>Example: resources</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">boolResource</span> <span class="o">=</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="n">numResource</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">,</span>
+    <span class="n">strResource</span> <span class="o">=</span> <span class="s2">&quot;hello&quot;</span><span class="p">,</span>
+    <span class="n">tableResource</span> <span class="o">=</span> <span class="p">{</span> <span class="n">value</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">},</span>
+
+    <span class="n">strResourceFn</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="s2">&quot;Hello!&quot;</span>
+    <span class="kr">end</span><span class="p">,</span>
+
+    <span class="n">functionResource</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="kr">function</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="kr">return</span> <span class="p">(</span><span class="s2">&quot;Hi, %s!&quot;</span><span class="p">):</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="kr">end</span>
+    <span class="kr">end</span><span class="p">,</span>
+
+    <span class="n">__init</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializing resources!&quot;</span><span class="p">)</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="c1">-- &quot;Initializing resources!&quot; will be printed here,</span>
+<span class="c1">-- because the above invocation of Resourceful()</span>
+<span class="c1">-- will execute resource function __init.</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">boolResource</span><span class="p">)</span> <span class="c1">-- true</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">numResource</span><span class="p">)</span> <span class="c1">-- 3.14</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">strResource</span><span class="p">)</span> <span class="c1">-- &quot;hello&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">tableResource</span><span class="p">.</span><span class="n">value</span><span class="p">)</span> <span class="c1">-- true</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">strResourceFn</span><span class="p">)</span> <span class="c1">-- &quot;Hello!&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">functionResource</span><span class="p">(</span><span class="s2">&quot;person&quot;</span><span class="p">))</span> <span class="c1">-- &quot;Hi, person!&quot;</span>
+</code></pre></div>
+<h5 id="config-property-search">config Property: search<a class="headerlink" href="#config-property-search" title="Permanent link">&para;</a></h5>
+<p><code>search</code> is an optional <code>Instance</code>, or <code>table</code> of <code>Instance</code> objects, to be
+searched when automatically acquiring resources.  Note that specifying an
+empty table effectively disables Resourceful's
+<a href="#automatic-resource-acquisition" title="Automatic Resource Acquisition">automatic resource acquisition</a>.  Defaults
+to the <code>Parent</code> of the Resourceful <code>Instance</code>.</p>
+<p>If multiple <code>Instance</code> objects are specified, they are searched in the order
+in which they are specified, until the first <code>Instance</code> is found with an
+immediate child whose name matches the requested resource.</p>
+<p>If a <a href="#config-property-resources" title="config Property: resources">custom resource</a> of the same name is
+defined, and the resource is not a <a href="#resource-functions" title="Resource Functions">resource function</a>,
+that resource will be used, bypassing automatic resource acquisition.
+However, if the resource <em>is</em> a resource function, automatic resource
+acquisition <em>will</em> be performed, with the acquired resource being passed to
+the resource function as a <a href="#signature_1" title="Resource Function Signature">function parameter</a>.
+The function can thus decide whether to return that <code>Instance</code>, or some other
+value, as the definition of the resource.</p>
+<p>Searching is performed by executing <code>:FindFirstChild(resourceName, false)</code> on
+each search target, where <code>resourceName</code> is the <code>string</code> name of the resource
+to be found, and <code>false</code> instructs Roblox to search only the immediate
+children of the search targets, and not deeper descendants.</p>
+<h6 id="errors_5">Errors<a class="headerlink" href="#errors_5" title="Permanent link">&para;</a></h6>
+<p><code>Resourceful()</code> will throw an error if <code>config.search</code> is present but has a
+type other than <code>Instance</code>, empty <code>table</code>, or <code>table</code> of <code>Instance</code> objects.</p>
+<h6 id="examples_5">Examples<a class="headerlink" href="#examples_5" title="Permanent link">&para;</a></h6>
+<figure><figcaption><em>Example: search</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">search</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">,</span>
+    <span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Parent</span><span class="p">,</span>
+    <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;ReplicatedStorage&quot;</span><span class="p">):</span><span class="n">FindFirstChild</span><span class="p">(</span><span class="s2">&quot;Scripts&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">),</span>
+  <span class="p">}})</span>
+
+<span class="c1">-- Resourceful searches for the following &quot;Helpers&quot; instances:</span>
+<span class="c1">-- script.Parent.Helpers</span>
+<span class="c1">-- script.Parent.Parent.Helpers</span>
+<span class="c1">-- game:GetService(&quot;ReplicatedStorage&quot;).Scripts.Helpers</span>
+<span class="kd">local</span> <span class="n">Helpers</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">Helpers</span>
+</code></pre></div>
+<h4 id="resource-functions">Resource Functions<a class="headerlink" href="#resource-functions" title="Permanent link">&para;</a></h4>
+<p>If a <a href="#config-property-resources" title="config Property: resources">custom resource</a> is defined as a <code>function</code>,
+the function will be executed to define the actual value of the resource:</p>
+<figure><figcaption><em>Example: Resource Function</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">greeting</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="s2">&quot;Hello!&quot;</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">greeting</span><span class="p">)</span> <span class="c1">-- Hello!</span>
+</code></pre></div>
+<p>Since functions are not executed until their corresponding resources are first
+requested, the acquisition of these resources is said to be <em>deferred</em>, or
+<em>lazy-loaded</em>.  This can be beneficial when:</p>
+<ul>
+<li>the initialization of the resource has a performance penalty this is better
+incurred when the resource is first needed</li>
+<li>the resource cannot be initialized until some other component has been
+prepared first</li>
+</ul>
+<p>If <a href="#config-property-iscached" title="config Property: isCached">caching</a> is enabled, the results of the
+<code>function</code> execution will be memorized, and returned for all future requests
+of that resource:</p>
+<figure><figcaption><em>Example: Resource Function Caching</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 41</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 41 again, because caching is enabled</span>
+</code></pre></div>
+<p>With caching disabled, the function is executed each time its corresponding
+resource is requested:</p>
+<figure><figcaption><em>Example: Resource Function Without Caching</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">isCached</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 41</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">number</span><span class="p">)</span> <span class="c1">-- 87</span>
+</code></pre></div>
+<h5 id="signature_1">Signature<a class="headerlink" href="#signature_1" title="Permanent link">&para;</a></h5>
+<p>Resource functions are invoked with the following signature:</p>
+<div class="highlight"><pre><span></span><code><span class="kr">function</span> <span class="p">(</span><span class="n">table</span> <span class="n">resources</span><span class="p">,</span> <span class="n">Instance</span> <span class="n">found</span><span class="p">)</span> <span class="kr">return</span> <span class="n">Variant</span>
+</code></pre></div>
+<h5 id="parameters_1">Parameters<a class="headerlink" href="#parameters_1" title="Permanent link">&para;</a></h5>
+<table>
+<thead>
+<tr class='header'>
+  <th>Name</th><th>Type</th><th>Synopsis</th></tr>
+</thead>
+<tbody>
+<tr><td>resources</td><td><code>table</code></td>
+<td>The same <code>table</code> for acquiring resources that was returned from
+<a href="#function-resourceful"><code>Resourceful()</code></a>, which allows
+the function to acquire other resources.
+(<a href="#parameter-resources">More details</a>).
+</td></tr>
+<tr><td>found</td><td><code>Instance</code>&nbsp;</td>
+<td>The first <code>Instance</code> found within the configured
+<a href="#config-property-search">search path</a> that has the same name as
+the requested resource, representing the resource that would have been
+returned if a resource function by the same name were not defined.
+(<a href="#parameter-found">More details</a>).
+</td></tr>
+</tbody>
+</table>
+
+<h5 id="returns_1">Returns<a class="headerlink" href="#returns_1" title="Permanent link">&para;</a></h5>
+<table>
+<thead>
+<tr class='header'>
+  <th>Type(s)</th><th>Synopsis</th></tr>
+</thead>
+<tbody>
+<tr><td>Variant (optional)</td>
+<td>Resource functions can return any data type, whose value will be used
+as the value of the acquired resource.</td></tr>
+</tbody>
+</table>
+
+<h5 id="side-effects_1">Side-Effects<a class="headerlink" href="#side-effects_1" title="Permanent link">&para;</a></h5>
+<p>Resource functions perform whatever side-effects they were programmed to
+perform.</p>
+<h5 id="errors_6">Errors<a class="headerlink" href="#errors_6" title="Permanent link">&para;</a></h5>
+<p>Resource functions will throw whatever errors they were programmed to throw.
+Any such errors will be wrapped and thrown by Resourceful.</p>
+<p>If a resource function returns <code>nil</code> and
+<a href="#config-property-isstrict" title="config Property: isStrict">strict mode</a> is enabled, Resourceful will throw an
+error.</p>
+<p>Circular references amongst <code>resources</code> will cause Resourceful to throw an
+error.</p>
+<h5 id="caveats_1">Caveats<a class="headerlink" href="#caveats_1" title="Permanent link">&para;</a></h5>
+<p>None.</p>
+<h6 id="parameter-resources">Parameter: resources<a class="headerlink" href="#parameter-resources" title="Permanent link">&para;</a></h6>
+<p><code>resources</code> is the same <code>table</code> for acquiring resources that was returned from
+<a href="#function-resourceful" title="Function: Resourceful()">Resourceful()</a>, which allows the function to acquire
+other resources.</p>
+<figure><figcaption><em>Example: Resource Chaining</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">ceiling</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+
+    <span class="n">getNumber</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="kr">function</span><span class="p">(</span><span class="n">floor</span><span class="p">)</span>
+        <span class="kr">return</span> <span class="n">floor</span> <span class="o">+</span> <span class="nb">math.random</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">ceiling</span> <span class="o">-</span> <span class="n">floor</span><span class="p">)</span>
+      <span class="kr">end</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">getNumber</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="c1">-- 4</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">getNumber</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="c1">-- 2</span>
+</code></pre></div>
+<p>Note that circular references amongst <code>resources</code> will cause Resourceful to
+throw an error.</p>
+<figure><figcaption><em>Example: Resource Function, Circular Reference</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">truthy</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="ow">not</span> <span class="n">resources</span><span class="p">.</span><span class="n">falsey</span>
+    <span class="kr">end</span><span class="p">,</span>
+
+    <span class="n">falsey</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="ow">not</span> <span class="n">resources</span><span class="p">.</span><span class="n">truthy</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">resources</span><span class="p">.</span><span class="n">truthy</span><span class="p">())</span> <span class="c1">-- throws an error</span>
+</code></pre></div>
+<h6 id="parameter-found">Parameter: found<a class="headerlink" href="#parameter-found" title="Permanent link">&para;</a></h6>
+<p><code>found</code> is the first <code>Instance</code> found within the configured
+<a href="#config-property-search" title="config Property: search">search path</a> that has the same name as the requested
+resource, representing the resource that would have been returned if a
+resource function by the same name were not defined.</p>
+<p>The <code>found</code> parameter effectively lets the function choose to conditionally
+override that resource when appropriate.</p>
+<figure><figcaption><em>Example: Resource Function, Conditional</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="n">PlayerLib</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="c1">-- When &quot;resources.PlayerLib&quot; is requested, for 90% of players it should</span>
+      <span class="c1">-- return the normal &quot;PlayerLib&quot; Instance child of the script parent:</span>
+      <span class="kr">if</span> <span class="nb">math.random</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">90</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="n">found</span>
+      <span class="kr">else</span>
+        <span class="c1">-- For the remaining players, &quot;resources.PlayerLib&quot; should instead</span>
+        <span class="c1">-- return the &quot;TestPlayerLib&quot; Instance child of the script parent:</span>
+        <span class="kr">return</span> <span class="n">resources</span><span class="p">.</span><span class="n">TestPlayerLib</span>
+      <span class="kr">end</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="c1">-- For 10% of players, PlayerLib actually will be &quot;TestPlayerLib&quot;:</span>
+<span class="kd">local</span> <span class="n">PlayerLib</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">PlayerLib</span>
+</code></pre></div>
+<h5 id="__init-resource-function">__init Resource Function<a class="headerlink" href="#__init-resource-function" title="Permanent link">&para;</a></h5>
+<p>If a special resource function named <code>__init</code> is defined, Resourceful will
+execute that function when
+<a href="#function-resourceful" title="Function: Resourceful()"><code>Resourceful()</code></a> is invoked.  <code>__init</code> is an
+appropriate location to perform common initialization logic that is needed by
+other <a href="#config-property-resources" title="config Property: resources">custom resources</a>, especially those whose
+initialization should be executed as soon as possible.</p>
+<figure><figcaption><em>Example: __init Resource Function</em></figcaption></figure>
+
+<div class="highlight"><pre><span></span><code><span class="kd">local</span> <span class="n">Resourceful</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="n">script</span><span class="p">.</span><span class="n">Parent</span><span class="p">.</span><span class="n">Resourceful</span><span class="p">)</span>
+<span class="kd">local</span> <span class="n">resources</span> <span class="o">=</span> <span class="n">Resourceful</span><span class="p">({</span>
+  <span class="n">resources</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="n">__init</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="kr">return</span> <span class="p">{</span>
+        <span class="c1">-- Do some expensive initialization logic here,</span>
+        <span class="c1">-- just once, as soon as Resourceful() is invoked.</span>
+        <span class="n">InitializedGameEngine</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">GameEngine</span><span class="p">.</span><span class="n">initialize</span><span class="p">(),</span>
+      <span class="p">}</span>
+    <span class="kr">end</span><span class="p">,</span>
+
+    <span class="n">isClient</span> <span class="o">=</span> <span class="n">game</span><span class="p">:</span><span class="n">GetService</span><span class="p">(</span><span class="s2">&quot;RunService&quot;</span><span class="p">).</span><span class="n">isClient</span><span class="p">(),</span>
+
+    <span class="n">GameEngine</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="c1">-- Load the client or server version of the game engine:</span>
+      <span class="kr">if</span> <span class="n">resources</span><span class="p">.</span><span class="n">isClient</span> <span class="kr">then</span>
+        <span class="kr">return</span> <span class="n">resources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">ClientGameEngine</span>
+      <span class="kr">else</span>
+        <span class="kr">return</span> <span class="n">resources</span><span class="p">.</span><span class="n">require</span><span class="p">.</span><span class="n">ServerGameEngine</span>
+      <span class="kr">end</span>
+    <span class="kr">end</span><span class="p">,</span>
+
+    <span class="n">InitializedGameEngine</span> <span class="o">=</span> <span class="kr">function</span><span class="p">(</span><span class="n">resources</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
+      <span class="c1">-- Return the game engine that was initialized</span>
+      <span class="c1">-- when Resourceful() was invoked.</span>
+      <span class="kr">return</span> <span class="n">resources</span><span class="p">.</span><span class="n">__init</span><span class="p">.</span><span class="n">InitializedGameEngine</span>
+    <span class="kr">end</span><span class="p">,</span>
+  <span class="p">}})</span>
+
+<span class="c1">-- Acquire the resource named &quot;InitializedGameEngine&quot;:</span>
+<span class="kd">local</span> <span class="n">engine</span> <span class="o">=</span> <span class="n">resources</span><span class="p">.</span><span class="n">InitializedGameEngine</span>
+</code></pre></div>
+<p><code>__init</code> is executed with the
+<a href="#signature_1" title="Resource Function Signature">same function signature</a> as other resource
+functions, although its <code>found</code> parameter will always be <code>nil</code>.</p>
+<p>The return value of <code>__init</code> can be <a href="#acquiring-resources" title="Acquiring Resources">acquired</a> and
+<a href="#config-property-iscached" title="config Property: isCached">cached</a> like any other resource.</p>
+<p>If <code>__init</code> is defined but is not a <code>function</code>, it will be behave like any
+other non-function <a href="#config-property-resources" title="config Property: resources">custom resource</a>.</p>
+<h2 id="learn-more">Learn More<a class="headerlink" href="#learn-more" title="Permanent link">&para;</a></h2>
+<p>Read the <a href=".." title="Overview">Overview</a> to learn how Resourceful can solve
+common resource acquisition problems.</p>
+<p>Read the <a href="../installation/" title="Installation">Installation</a> instructions to learn how to make
+Resourceful available within your projects.</p>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        <a href="../installation/" class="md-footer__link md-footer__link--prev" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Installation
+            </div>
+          </div>
+        </a>
+      
+      
+        <a href="../changelog/" class="md-footer__link md-footer__link--next" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Changelog
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}, "search": "../assets/javascripts/workers/search.fe42c31b.min.js", "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.4ea5477f.min.js"></script>
+      
+    
+  </body>
+</html>

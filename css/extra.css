@@ -1,0 +1,62 @@
+.md-typeset a:hover {
+  text-decoration: underline;
+}
+.md-typeset figcaption {
+  margin: 0;
+  padding: 2pt 10pt;
+  font-size: 0.9em;
+  font-style: normal;
+  border: 2px solid;
+  border-color: var(--md-code-bg-color);
+  border-bottom: none;
+}
+.md-typeset figure {
+  margin: 0;
+  padding: 0;
+}
+.md-typeset pre {
+  margin-top: 0px;
+}
+.md-typeset h5 {
+  font-size: 1em;
+}
+.md-typeset h6 {
+  font-size: 1em;
+  font-weight: normal;
+  text-decoration: underline;
+}
+.md-typeset table {
+  display: table !important;
+}
+.md-typeset table th,
+.md-typeset table tr.header td {
+  background-color: var(--md-code-bg-color) !important;
+  color: var(--md-typeset-color) !important;
+  font-weight: bold !important;
+}
+.md-typeset table,
+.md-typeset table td,
+.md-typeset table th,
+.md-typeset table tr {
+  border: 1px solid;
+  border-color: var(--md-code-bg-color);
+  border-color: lightgrey;
+  border-collapse: collapse;
+}
+.md-typeset table tr:hover td {
+  background-color: #f0f2ff;
+}
+.md-typeset table tr:hover td code {
+  background-color: #d5d9f5;
+}
+.md-typeset__table {
+  width: 100%;
+}
+.md-typeset__table td {
+  font-size: 1.1em;
+}
+.pedantic-disclaimer {
+  font-size: 0.9em;
+  font-style: italic;
+  font-weight: lighter;
+}
